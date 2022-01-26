@@ -1,9 +1,7 @@
 <template>
   <div class="main">
     <template v-for="item in cellsAtScreen" :key="item">
-<!--      <div  @mouseenter="changeIndex(item)">-->
-      <CellComponent/>
-<!--      </div>-->
+      <CellComponent  @mouseenter="changeIndex(item)"/>
     </template>
 
     <div class="content">
@@ -40,8 +38,9 @@ export default {
   },
   methods: {
     changeIndex(cellIndex) {
-      this.mousePositionX = cellIndex > this.columns ? cellIndex % this.rows : cellIndex;
+      this.mousePositionX = cellIndex > this.columns ? ((cellIndex - 1) % this.rows) : cellIndex;
       this.mousePositionY = cellIndex > this.columns ? Math.ceil(cellIndex / this.columns) : 0;
+      console.log(this.mousePositionX,  this.mousePositionY)
     },
   }
 }
