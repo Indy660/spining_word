@@ -1,5 +1,5 @@
 <template>
-  <div class="css">{{ inscription }}</div>
+  <div class="name">{{ inscription }}</div>
 </template>
 
 <script>
@@ -14,7 +14,7 @@ export default {
 </script>
 
 <style scoped>
-.css {
+.name {
   font-family: 'Fredoka One', cursive;
   position: absolute;
   top: 50%;

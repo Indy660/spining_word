@@ -4,7 +4,13 @@
 
 <script>
 export default {
-  name: "CellComponent"
+  name: "CellComponent",
+  props: {
+    index: {
+      type: Number,
+      default: 0,
+    }
+  },
 }
 </script>
 

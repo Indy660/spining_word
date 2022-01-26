@@ -1,7 +1,9 @@
 <template>
   <div class="main">
     <template v-for="item in cellsAtScreen" :key="item">
+<!--      <div  @mouseenter="changeIndex(item)">-->
       <CellComponent/>
+<!--      </div>-->
     </template>
 
     <div class="content">
@@ -26,13 +28,21 @@ export default {
       rows: 15,
       columns: 15,
       timesInscription: 10,
-      color: 'green'
+
+      mousePositionX: 7,
+      mousePositionY: 7,
     }
   },
   computed: {
     cellsAtScreen() {
       return (this.rows * this.columns)
     }
+  },
+  methods: {
+    changeIndex(cellIndex) {
+      this.mousePositionX = cellIndex > this.columns ? cellIndex % this.rows : cellIndex;
+      this.mousePositionY = cellIndex > this.columns ? Math.ceil(cellIndex / this.columns) : 0;
+    },
   }
 }
 </script>
@@ -59,17 +69,18 @@ export default {
 }
 
 //$timesInscription: var(--timesInscription);
-$timesInscription: 15;
+$middle: 15;
 $columns: 15;
 $rows: 15;
-@for $i from 0 to $timesInscription {
+@for $i from 0 to $middle {
   //каждый 15 + другой элемент
   //.cell:nth-child($columns#{$n} + #{$i + 1}):hover ~ .content {
   .cell:nth-child(15n + #{$i + 1}):hover ~ .content {
     //передвижение надписи по оси х за мышкой
     --positionX: #{$i};
   }
-  .cell:nth-child(n + #{$rows * $i + 1}):nth-child(-n + #{$rows * ($i + 1)}):hover ~ .content {
+  //:nth-child(-n + #{$rows * ($i + 1)}) - зачем лишнее?
+  .cell:nth-child(n + #{$rows * $i + 1}):hover ~ .content {
   //.cell:nth-child(n + #{15 * $i + 1}):nth-child(-n + #{15 * ($i + 1)}):hover ~ .content {
     //передвижение надписи по оси у за мышкой
     --positionY: #{$i};
@@ -94,8 +105,8 @@ $rows: 15;
   align-items: center;
 }
 
-//надпись
-.css {
+//надпись, последняя $i - самая верхняя
+.name {
   @for $i from 0 to 10 {
     &:nth-child(#{$i + 1}) {
       font-size: #{100 + $i * 10}px;
