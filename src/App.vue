@@ -1,11 +1,11 @@
 <template>
   <div class="main">
-    <template v-for="item in 225" :key="item">
+    <template v-for="item in cellsAtScreen" :key="item">
       <CellComponent/>
     </template>
 
     <div class="content">
-      <template v-for="item in 10" :key="item">
+      <template v-for="item in timesInscription" :key="item">
         <InscriptionName/>
       </template>
     </div>
@@ -21,6 +21,19 @@ export default {
     CellComponent,
     InscriptionName,
   },
+  data() {
+    return {
+      rows: 15,
+      columns: 15,
+      timesInscription: 10,
+      color: 'green'
+    }
+  },
+  computed: {
+    cellsAtScreen() {
+      return (this.rows * this.columns)
+    }
+  }
 }
 </script>
 
@@ -33,30 +46,47 @@ export default {
   box-sizing: border-box;
 }
 
-.main {
-  background-color: black;
-  height: 100vh;
-  display: grid;
-  grid-template: repeat(15, 1fr) / repeat(15, 1fr);
-  overflow: hidden;
+:root {
+  //начальное направление текста
+  --positionX: 7;
+  --positionY: 7;
+
+  --rows: v-bind(rows);
+  //--columns: v-bind(columns);
+  --columns: v-bind(columns);
+  //--timesInscription: v-bind(timesInscription);
+  //--timesInscription: v-bind(timesInscription);
 }
 
-@for $i from 0 to 15 {
+//$timesInscription: var(--timesInscription);
+$timesInscription: 15;
+$columns: 15;
+$rows: 15;
+@for $i from 0 to $timesInscription {
+  //каждый 15 + другой элемент
+  //.cell:nth-child($columns#{$n} + #{$i + 1}):hover ~ .content {
   .cell:nth-child(15n + #{$i + 1}):hover ~ .content {
     //передвижение надписи по оси х за мышкой
     --positionX: #{$i};
   }
-  .cell:nth-child(n + #{15 * $i + 1}):nth-child(-n + #{15 * ($i + 1)}):hover ~ .content {
+  .cell:nth-child(n + #{$rows * $i + 1}):nth-child(-n + #{$rows * ($i + 1)}):hover ~ .content {
+  //.cell:nth-child(n + #{15 * $i + 1}):nth-child(-n + #{15 * ($i + 1)}):hover ~ .content {
     //передвижение надписи по оси у за мышкой
     --positionY: #{$i};
   }
 }
 
-.content {
-  //начальное направление текста
-  --positionX: 7;
-  --positionY: 7;
+.main {
+  background-color: black;
+  height: 100vh;
+  display: grid;
+  grid-template: repeat(v-bind(rows), 1fr) / repeat(v-bind(columns), 1fr);
+  //grid-template: repeat(15, 1fr) / repeat(15, 1fr);
+  //grid-template: repeat(var(--rows), 1fr) / repeat(var(--columns), 1fr);
+  overflow: hidden;
+}
 
+.content {
   position: absolute;
   top: 0; right: 0; bottom: 0; left: 0;
   display: flex;
@@ -64,6 +94,7 @@ export default {
   align-items: center;
 }
 
+//надпись
 .css {
   @for $i from 0 to 10 {
     &:nth-child(#{$i + 1}) {
